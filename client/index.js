@@ -124,7 +124,12 @@ console.log(FilteredPrice);
 // 🎯 TODO: Average Basket
 // 1. Determine the average basket of the marketplace
 // 2. Log the average
-
+var avrg = 0;
+for(i=0;i < nb_products;i++){
+  avrg+= marketplace[i].price;
+}
+avrg = Math.round(avrg / nb_products);
+console.log(avrg);
 
 
 
