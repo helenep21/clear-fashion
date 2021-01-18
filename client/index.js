@@ -72,22 +72,37 @@ function SortPrice(){
   var marketSorted = [];
   var j;
   for(j=0;j < nb_products;j++){
-    var temp =[marketplace[j].brand,marketplace[j].link,marketplace[j].price,marketplace[j].name,marketplace[j].date];
+    var temp =[marketplace[j].price,marketplace[j].name,marketplace[j].brand,marketplace[j].link,marketplace[j].date];
     marketSorted.push(temp);
   }
   marketSorted.sort(function(a,b){
-    return a[2] - b[2];
+    return a[0] - b[0];
   });
   return marketSorted;
 }
 const SortedPrice = SortPrice();
-console.log(SortedPrice)
+console.log(SortedPrice);
 
 // 🎯 TODO: Sort by date
 // 1. Create a function to sort the marketplace objects by products date
 // 2. Create a variable and assign it the list of products by date from recent to old
 // 3. Log the variable
-
+function SortDate(){
+  var marketSortedDate = [];
+  var j;
+  var dateFormat;
+  for(j=0;j < nb_products;j++){
+    dateFormat = marketplace[j].date.toString();
+    var temp =[new Date(dateFormat),marketplace[j].name,marketplace[j].brand,marketplace[j].price,marketplace[j].link];
+    marketSortedDate.push(temp);
+  }
+  marketSortedDate.sort(function(a,b){
+    return b[0] - a[0];
+  });
+  return marketSortedDate;
+}
+const SortedDate = SortDate();
+console.log(SortedDate);
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
