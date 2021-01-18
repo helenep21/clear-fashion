@@ -17,12 +17,6 @@ const MY_FAVORITE_BRANDS = [{
 console.table(MY_FAVORITE_BRANDS);
 console.log(MY_FAVORITE_BRANDS[0]);
 
-// 1
-const cheapest =  'https://www.loom.fr/products/le-t-shirt'
-console.log(cheapest)
-
-
-
 /**
  * 🌱
  * Let's go with a very very simple first todo
@@ -35,7 +29,8 @@ console.log(cheapest)
 // 1. Create a new variable and assign it the link of the cheapest t-shirt
 // I can find on these e-shops
 // 2. Log the variable
-
+const cheapest =  'https://www.loom.fr/products/le-t-shirt';
+console.log(cheapest);
 
 
 
@@ -52,7 +47,8 @@ console.log(cheapest)
 // 🎯 TODO: Number of products
 // 1. Create a variable and assign it the number of products
 // 2. Log the variable
-
+const nb_products = marketplace.length;
+console.log(nb_products);
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
