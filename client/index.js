@@ -156,6 +156,29 @@ console.log(avrg);
 //
 // 2. Log the variable
 // 3. Log the number of products by brands
+const brands = {}
+var i;
+var prodB;
+for(i=0;i< brand_names.length;i++){
+  prodB=[];
+  var j;
+  for(j=0;j<nb_products;j++){
+    if(marketplace[j].brand == brand_names[i]){
+      var product=[marketplace[j].name,marketplace[j].price,marketplace[j].link,marketplace[j].date];
+      prodB.push(product);
+    }
+  }
+  brands[brand_names[i]] = prodB;
+}
+console.log(brands);
+var k;
+var qtB = "";
+for(var b in brands){
+  qtB = b+ " : "+ brands[b].length +" products";
+  console.log(qtB);
+}
+
+
 
 
 // 🎯 TODO: Sort by price for each brand
