@@ -184,7 +184,12 @@ for(var b in brands){
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
-
+for(var b in brands){
+  brands[b]=brands[b].sort(function(a1,a2){
+    return a1[1] - a2[1];
+  });
+};
+console.log(brands);
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
