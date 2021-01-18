@@ -339,6 +339,9 @@ console.log(uuidProduct);
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the new list of product
+var idxDeleteProduct = COTELE_PARIS.indexOf(uuidProduct);
+COTELE_PARIS.splice(idxDeleteProduct,1);
+console.log(COTELE_PARIS);
 
 // 🎯 TODO: Save the favorite product
 let blueJacket = {
