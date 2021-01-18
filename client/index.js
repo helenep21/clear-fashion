@@ -384,3 +384,5 @@ console.log(blueJacket);
 // 🎯 TODO: Save in localStorage
 // 1. Save MY_FAVORITE_BRANDS in the localStorage
 // 2. log the localStorage
+localStorage.setItem("favoriteBrands",JSON.stringify(MY_FAVORITE_BRANDS));
+console.log(JSON.parse(localStorage.getItem("favoriteBrands")));
