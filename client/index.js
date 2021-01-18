@@ -107,7 +107,19 @@ console.log(SortedDate);
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
 // 2. Log the list
-
+function FilterPrice(min,max){
+  var priceFilter = [];
+  var j;
+  for(j=0;j < nb_products;j++){
+    var temp =marketplace[j];
+    if(temp.price > min && temp.price < max){
+      priceFilter.push(temp);
+    }
+  }
+  return priceFilter;
+}
+const FilteredPrice = FilterPrice(50,100);
+console.log(FilteredPrice);
 
 // 🎯 TODO: Average Basket
 // 1. Determine the average basket of the marketplace
