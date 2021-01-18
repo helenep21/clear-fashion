@@ -357,6 +357,9 @@ jacket.favorite = true;
 
 // 1. Log `blueJacket` and `jacket` variables
 // 2. What do you notice?
+console.log(blueJacket);
+console.log(jacket);
+// they both have the propery favorite set to true
 
 blueJacket = {
   'link': 'https://coteleparis.com/collections/tous-les-produits-cotele/products/la-veste-bleu-roi',
@@ -365,8 +368,10 @@ blueJacket = {
 };
 
 // 3. Update `jacket` property with `favorite` to true WITHOUT changing blueJacket properties
-
-
+jacket = Object.assign({}, blueJacket,{'favorite':true});
+console.log(jacket);
+console.log(blueJacket);
+// this time, blueJacket hasn't been updated
 
 
 
