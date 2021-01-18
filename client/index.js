@@ -315,6 +315,18 @@ for(var product in COTELE_PARIS){
 // 🎯 TODO: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
 // // A reasonable price if all the products are less than 100€
+var reasonable = true;
+for(var product in COTELE_PARIS){
+  if(COTELE_PARIS[product].price > 99){
+    reasonable = false;
+  }
+}
+if(reasonable==true){
+  console.log("reasonable prices");
+}
+else{
+  console.log("unreasonable prices");
+}
 
 
 // 🎯 TODO: Find a specific product
