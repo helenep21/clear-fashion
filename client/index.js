@@ -195,7 +195,14 @@ console.log(brands);
 // 1. For each brand, sort the products by date, from old to recent
 // 2. Log the sort
 
-
+for(var b in brands){
+  brands[b]=brands[b].sort(function(a1,a2){
+    a1[3]=new Date(a1[3].toString());
+    a2[3]=new Date(a2[3].toString());
+    return a1[3] - a2[3];
+  });
+};
+console.log(brands);
 
 
 
