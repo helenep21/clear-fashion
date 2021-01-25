@@ -121,3 +121,13 @@ document.addEventListener('DOMContentLoaded', () =>
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination))
 );
+
+/**
+ * Browse page
+ * @type {[type]}
+ */
+selectPage.addEventListener('change',event => {
+  fetchProducts(parseInt(event.target.value),selectShow.value)
+    .then(setCurrentProducts)
+    .then(() => render(currentProducts,currentPagination));
+});
