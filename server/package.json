@@ -8,7 +8,8 @@
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.5",
     "parse-domain": "^3.0.3",
-    "require-all": "^3.0.0"
+    "require-all": "^3.0.0",
+    "yarn.lock": "0.0.1-security"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

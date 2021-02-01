@@ -4,23 +4,15 @@
 // current products on the page
 let currentProducts = [];
 let currentPagination = {};
-let currentBrand = [];
-let now = new Date();
-let number;
-
 
 // inititiqte selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
+const selectBrands = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
-const spanRecentProducts = document.querySelector('#nbRecentProducts');
-const selectBrand = document.querySelector('#brand-select');
-const selectRecentProduct = document.querySelector('#recent-release');
-const selectReasonablePrice = document.querySelector('#reasonable-price');
-const selectSort = document.querySelector("#sort-select");
-
-
+const selectSort = document.querySelector('#sort-select');
+const NbProducts = document.querySelector('#nbProducts');
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -39,23 +31,20 @@ const setCurrentProducts = ({result, meta}) => {
  */
 const fetchProducts = async (page = 1, size = 12) => {
   try {
-    const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
-    );
+    const response = await fetch(`https://clear-fashion-api.vercel.app?page=${page}&size=${size}`);
     const body = await response.json();
 
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
     }
-
+    
     return body.data;
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
   }
 };
-
 
 /**
  * Render list of products
@@ -70,8 +59,7 @@ const renderProducts = products => {
       <div class="product" id=${product.uuid}>
         <span>${product.brand}</span>
         <a href="${product.link}">${product.name}</a>
-        <span>${product.price}€</span>
-        <span>${product.released}</span>
+        <span>${product.price}</span>
       </div>
     `;
     })
@@ -83,25 +71,38 @@ const renderProducts = products => {
   sectionProducts.appendChild(fragment);
 };
 
-
-
-function getBrandsfromProducts (products) {
-  const brands_double = products.map(product => product.brand);
-  const brands = Array.from(new Set(brands_double));
-  return brands;
-  
-}
-
-function GetNumberOfProduct(products){
-  var number = 0;
-  for(let i = 0; i< products.length; i++)
-  {
-    number = number + 1;
+//Feature 2
+const renderBrands = currentProducts => {
+  try {
+    let brands = [''];
+    let brands_html = "";
+    brands_html += `<option value="All">All</option>`
+    for(let i = 0; i<currentProducts.length; i++){      
+      if(brands.indexOf(currentProducts[i].brand) == -1){        
+        brands.push(currentProducts[i].brand);
+        brands_html += `<option value="${currentProducts[i].brand}">${currentProducts[i].brand}</option>`
+      }
+    }
+    selectBrands.innerHTML = brands_html;
   }
-  return number;
+  catch (error) {
+    console.error(error);
+  }  
 }
 
-
+function filterBrands(currentProducts, filterBrand){
+  if(filterBrand != 'All'){
+    let filteredProducts = [];
+    for(let i = 0; i < currentProducts.length; i++){
+      if(currentProducts[i].brand == filterBrand){
+        filteredProducts.push(currentProducts[i]);
+      }
+    }
+    renderProducts(filteredProducts);
+  }else {
+    renderProducts(currentProducts);
+  } 
+}
 
 /**
  * Render page selector
@@ -119,48 +120,21 @@ const renderPagination = pagination => {
 };
 
 /**
- * Render brands selector
- * @param  {Array} brands
- */
-const renderBrands = brands => {
-  const options = Array.from(
-    {'length': brands.length},
-    (value, index) => `<option value="${brands[index]}">${brands[index]}</option>`
-  ).join('');
-
-  selectBrand.innerHTML = options;
-};
-
-
-/**
  * Render page selector
  * @param  {Object} pagination
  */
 const renderIndicators = pagination => {
-  const {count} = pagination;  
+  const {count} = pagination;
+
+  spanNbProducts.innerHTML = count;
 };
-
-const renderNumberofProduct = products => {
-  spanNbProducts.innerHTML = GetNumberOfProduct(products);
-};
-
-const renderNumberOfRecentproduct = products => {
-  spanRecentProducts.innerHTML = GetNumberOfProduct(products);
-
-};
-
 
 const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
-  renderNumberofProduct(currentProducts);
-  
-  const brands = getBrandsfromProducts(currentProducts);
-  renderBrands(brands);
-  };
-  
-
+  renderBrands(currentProducts);
+};
 
 /**
  * Declaration of all Listeners
@@ -176,126 +150,118 @@ selectShow.addEventListener('change', event => {
     .then(() => render(currentProducts, currentPagination));
 });
 
-document.addEventListener('DOMContentLoaded', () =>
-  fetchProducts()
-    .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination))
-);
-
+//Feature 1
 selectPage.addEventListener('change', event => {
   fetchProducts(parseInt(event.target.value), selectShow.value)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
 });
 
+//Feature 2
 
-
-
-// Ici on filtre les currents products
-// Par brand
-
-selectBrand.addEventListener('change', event => {
-  const filteredProducts = [];
-  currentProducts.map(function(product) {
-    if(product.brand === event.target.value)
-    {
-      filteredProducts.push(product);
-    }
-  }
-  )
-  renderProducts(filteredProducts);
+selectBrands.addEventListener('change', event => {
+    (SortChoice(currentProducts, selectSort.value));
 });
 
+document.addEventListener('DOMContentLoaded', () =>
+  fetchProducts()
+    .then(setCurrentProducts)
+    .then(() => render(currentProducts, currentPagination))
+);
+// Feature 
+// Feature 3,4,5 and 6
 
-// Par date
-
-function dayDiff(d1, d2)
-{
-  d1 = d1.getTime() / 86400000;
-  d2 = d2.getTime() / 86400000;
-  return new Number(d2 - d1).toFixed(0);
+function SortChoice(currentProducts,selecSort){
+  if (selectSort.value == 'date-desc')
+   SortDate(currentProducts,'desc');
+  if (selectSort.value == 'date-asc')
+    SortDate(currentProducts,'asc');
+  if (selectSort.value == 'price-asc')
+    SortPrice(currentProducts,'desc');
+  if (selectSort.value == 'price-desc')
+    SortPrice(currentProducts,'asc');
+  if (selectSort.value == 'affordable')
+    SortAffordable(currentProducts);
+  if (selectSort.value == 'new-released')
+    SortRecent(currentProducts);
 }
 
-
-selectRecentProduct.addEventListener('change', event =>{
-  const recentProduct = [];
-  currentProducts.map(function(product){
-    var mydate = new Date(product.released);
-    const diff = dayDiff(mydate,now);
-    const diff_weeks = diff/7;
-    if(diff_weeks <= '2')
-      {
-        recentProduct.push(product);
-      }
-    }  
-  )
-  renderProducts(recentProduct);
-  renderNumberOfRecentproduct(recentProduct);
-  
-  });
-
-
-// Par prix inferieur à 50e
-
-selectReasonablePrice.addEventListener('change', event => {
-  const reasonable_price = [];
-  currentProducts.map(function(product){
-    if(product.price <= 50)
-     {
-      reasonable_price.push(product);
-     }
+function SortAffordable(currentProducts){
+  let affordableproducts = [];
+  for(let i = 0; i < currentProducts.length; i++){
+    if(currentProducts[i].price < 50){
+      affordableproducts.push(currentProducts[i]);
     }
-    )
-renderProducts(reasonable_price);
-});
+  }
+  filterBrands(affordableproducts, selectBrands.value);
+}
+function SortRecent(currentProducts){
+  var date = new Date();
+  let RecentProducts = [];
+  for(let i = 0; i < currentProducts.length; i++){
+    var DateProduct = new Date(currentProducts[i].released);
+    if(date - DateProduct< 86400*15000){
+      RecentProducts.push(currentProducts[i]);
+    }
+  }
+  filterBrands(RecentProducts, selectBrands.value);
+}
+function compareDatedesc(a,b){
+  if(a.released < b.released)
+   return -1;
+  if(a.released > b.released)
+   return 1;
+  return 0;
+}
+function compareDateasc(a,b){
+  if(a.released < b.released)
+   return 1;
+  if(a.released > b.released)
+   return -1;
+  return 0;
+}
+function comparePricedesc(a,b){
+  if(a.price < b.price)
+   return -1;
+  if(a.price > b.price)
+   return 1;
+  return 0;
+}
+function comparePriceasc(a,b){
+  if(a.price < b.price)
+   return 1;
+  if(a.price > b.price)
+   return -1;
+  return 0;
+}
+
+function SortDate(currentProducts,type){
+  if(type == 'desc'){
+    let sortedProducts = currentProducts.sort(compareDatedesc);
+    filterBrands(sortedProducts,selectBrands.value);
+  }
+
+  else{
+    let sortedProducts = currentProducts.sort(compareDateasc);
+    filterBrands(sortedProducts,selectBrands.value);
+  }
 
 
+}
+function SortPrice(currentProducts,type){
+  if(type == 'desc'){
+    let sortedProducts = currentProducts.sort(comparePricedesc);
+    filterBrands(sortedProducts,selectBrands.value);
+  }
+  else{
+    let sortedProducts = currentProducts.sort(comparePriceasc);
+    filterBrands(sortedProducts,selectBrands.value);
+  }
 
-
-// Par prix cheapest and expensive
+}
 
 selectSort.addEventListener('change', event => {
-  const sorting = [];
-  if(event.target.value === "price-asc"){
-  currentProducts.map(function(product){
-      if(product.price <= 20)
-      {
-        sorting.push(product);
-      }
-    })
-  }
-  if(event.target.value === "price-desc"){
-  currentProducts.map(function(product){
-    if(product.price > 20)
-    {
-      sorting.push(product);
-    }
-  })
-  }
-  if(event.target.value === "date-asc"){
-    currentProducts.map(function(product){
-      var mydate = new Date(product.released);
-      const diff = dayDiff(mydate,now);
-      const diff_weeks = diff/7;
-      if(diff_weeks <= '2')
-        {
-          sorting.push(product);
-        }
-      }  
-    )
-  }
-  if(event.target.value === "date-desc"){
-    currentProducts.map(function(product){
-      var mydate = new Date(product.released);
-      const diff = dayDiff(mydate,now);
-      const diff_weeks = diff/7;
-      if(diff_weeks > '2')
-        {
-          sorting.push(product);
-        }
-      }  
-    )
-
-  }
-  renderProducts(sorting);
+  SortChoice(currentProducts, event.target.value);
 });
+
+//Feature 8
