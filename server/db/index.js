@@ -26,7 +26,7 @@ const getDB = module.exports.getDB = async () => {
 
     return database;
   } catch (error) {
-    console.error('🚨 MongoClient.connect...', error);
+    console.error('🚨 Connection failed', error);
     return null;
   }
 };
