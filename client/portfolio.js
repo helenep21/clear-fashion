@@ -47,7 +47,7 @@ const setCurrentProducts = ({result, meta}) => {
  * @return {Object}
  */
 
-
+/*
  const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
@@ -65,9 +65,9 @@ const setCurrentProducts = ({result, meta}) => {
     console.error(error);
     return {currentProducts, currentPagination};
   }
-};
+};*/
 
-/* old version of the fetch
+//old version of the fetch
 const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
@@ -85,7 +85,7 @@ const fetchProducts = async (page = 1, size = 12) => {
     console.error(error);
     return {currentProducts, currentPagination};
   }
-};*/
+};
 
 const sortPrice = (a, b) => a.price - b.price;
 
