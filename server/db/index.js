@@ -2,9 +2,9 @@ require('dotenv').config();
 const {MongoClient} = require('mongodb');
 const fs = require('fs');
 
-const MONGODB_DB_NAME = 'clearfashion';
+const MONGODB_DB_NAME = 'ClearFashion';
 const MONGODB_COLLECTION = 'products';
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = "mongodb+srv://userMain:MR8pdyGpQ0eNhl9g@cluster0.3t63t.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 let client = null;
 let database = null;
@@ -16,10 +16,6 @@ let database = null;
 const getDB = module.exports.getDB = async () => {
   try {
     if (database) {
-<<<<<<< HEAD
-=======
-      console.log('💽  Already Connected');
->>>>>>> f66195154ab69ddaba07392c2dc18dbae9549f74
       return database;
     }
 
@@ -44,24 +40,14 @@ module.exports.insert = async products => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-<<<<<<< HEAD
     const result = await collection.insertMany(products);
-=======
-    // More details
-    // https://docs.mongodb.com/manual/reference/method/db.collection.insertMany/#insert-several-document-specifying-an-id-field
-    const result = await collection.insertMany(products, {'ordered': false});
->>>>>>> f66195154ab69ddaba07392c2dc18dbae9549f74
 
     return result;
   } catch (error) {
     console.error('🚨 collection.insertMany...', error);
     fs.writeFileSync('products.json', JSON.stringify(products));
     return {
-<<<<<<< HEAD
       'insertedCount': 0
-=======
-      'insertedCount': error.result.nInserted
->>>>>>> f66195154ab69ddaba07392c2dc18dbae9549f74
     };
   }
 };
@@ -83,6 +69,72 @@ module.exports.find = async query => {
     return null;
   }
 };
+
+
+module.exports.findById = async id => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const result = await collection.find({'_id':id}).toArray();
+
+    return result;
+
+  } catch (error) {
+    console.error('collection.find..', error);
+    return null;
+  }
+}
+
+
+module.exports.filteredproducts = async (limit, brand, price) => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const result = await collection.find({'brand':brand,'price':{$lte:price}}).limit(limit).toArray();
+
+    return result;
+  } catch (error) {
+    console.error('collection.find..', error);
+    return null;
+  }
+}
+
+module.exports.getMeta = async(page, size,query=null ) => {
+  const db = await getDB();
+  const collection = db.collection(MONGODB_COLLECTION);
+  let count;
+  if (query==null){
+    count = await collection.count();
+  }
+  else{
+    count = await collection.find(query).count();
+  }
+  
+  const pageCount = Math.ceil(count/size);
+  return {"currentPage" : page,"pageCount":pageCount,"pageSize":size,"count":count} 
+}
+
+module.exports.findPage = async (page,size,query=null) => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const offset = page ? page * size : 0;
+    let result;
+    if(query==undefined){
+      result = await collection.find({}).skip(offset)
+                  .limit(size).toArray(); 
+    }else{
+      result = await collection.find(query).skip(offset)
+                  .limit(size).toArray(); 
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('🚨 collection.findPage...', error);
+    return null;
+  }
+};
+
 
 /**
  * Close the connection
