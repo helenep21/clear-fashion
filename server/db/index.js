@@ -16,6 +16,10 @@ let database = null;
 const getDB = module.exports.getDB = async () => {
   try {
     if (database) {
+<<<<<<< HEAD
+=======
+      console.log('💽  Already Connected');
+>>>>>>> f66195154ab69ddaba07392c2dc18dbae9549f74
       return database;
     }
 
@@ -40,14 +44,24 @@ module.exports.insert = async products => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
+<<<<<<< HEAD
     const result = await collection.insertMany(products);
+=======
+    // More details
+    // https://docs.mongodb.com/manual/reference/method/db.collection.insertMany/#insert-several-document-specifying-an-id-field
+    const result = await collection.insertMany(products, {'ordered': false});
+>>>>>>> f66195154ab69ddaba07392c2dc18dbae9549f74
 
     return result;
   } catch (error) {
     console.error('🚨 collection.insertMany...', error);
     fs.writeFileSync('products.json', JSON.stringify(products));
     return {
+<<<<<<< HEAD
       'insertedCount': 0
+=======
+      'insertedCount': error.result.nInserted
+>>>>>>> f66195154ab69ddaba07392c2dc18dbae9549f74
     };
   }
 };
