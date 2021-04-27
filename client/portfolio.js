@@ -47,27 +47,7 @@ const setCurrentProducts = ({result, meta}) => {
  * @return {Object}
  */
 
-/*
- const fetchProducts = async (page = 1, size = 12) => {
-  try {
-    const response = await fetch(
-      `https://server-fashion.vercel.app//search?page=${page}&size=${size}`
-    );
-    const body = await response.json();
 
-    if (body.success !== true) {
-      console.error(body);
-      return {currentProducts, currentPagination};
-    }
-
-    return body.data;
-  } catch (error) {
-    console.error(error);
-    return {currentProducts, currentPagination};
-  }
-};*/
-
-//old version of the fetch
 const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
